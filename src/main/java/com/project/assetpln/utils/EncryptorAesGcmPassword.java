@@ -11,7 +11,7 @@ import javax.crypto.spec.GCMParameterSpec;
 
 import org.springframework.stereotype.Component;
 
-import co.id.sdinpresende7be.model.AesConfiguration;
+import com.project.assetpln.model.AesConfiguration;
 
 @Component
 public class EncryptorAesGcmPassword {

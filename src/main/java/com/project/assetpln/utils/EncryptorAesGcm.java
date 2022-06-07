@@ -28,9 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import co.id.sdinpresende7be.model.AesConfiguration;
-import co.id.sdinpresende7be.service.AesConfigurationService;
-
 @Component
 public class EncryptorAesGcm {
 	
