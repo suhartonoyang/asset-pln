@@ -56,6 +56,8 @@ public class UserService {
 		newUser.setAesConfiguration(aesConfiguration);
 		newUser.setRole(user.getRole().toUpperCase());
 		newUser.setName(user.getName());
+		newUser.setEmail(user.getEmail());
+		newUser.setHandphoneNumber(user.getHandphoneNumber());
 
 		return userRepository.save(newUser);
 	}
