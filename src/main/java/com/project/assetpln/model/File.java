@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,6 +54,6 @@ public class File implements Serializable {
 
 	@OneToMany(mappedBy = "file")
 	@JsonIgnoreProperties("file")
-	private Set<UploadHistory> uploadHistory;
+	private List<UploadHistory> uploadHistory;
 
 }

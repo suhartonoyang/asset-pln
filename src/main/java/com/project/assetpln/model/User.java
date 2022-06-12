@@ -60,7 +60,7 @@ public class User implements Serializable {
 	private Date createdDate;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "aes_configuration_id")
 	private AesConfiguration aesConfiguration;
 
 }

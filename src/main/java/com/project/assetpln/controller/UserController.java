@@ -22,7 +22,7 @@ import com.project.assetpln.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "${rest.prefix}/users")
 @RestController
 @CrossOrigin
 @Api(description = "for user admin and teacher")

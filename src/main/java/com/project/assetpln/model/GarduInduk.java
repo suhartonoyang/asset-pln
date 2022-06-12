@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,10 +50,10 @@ public class GarduInduk implements Serializable {
 
 	@OneToMany(mappedBy = "garduInduk")
 	@JsonIgnoreProperties("garduInduk")
-	private Set<Flooding> flooding;
+	private List<Flooding> flooding;
 
 	@OneToMany(mappedBy = "garduInduk")
 	@JsonIgnoreProperties("garduInduk")
-	private Set<MappingLocationGarduInduk> mappingLocationGarduInduk;
+	private List<MappingLocationGarduInduk> mappingLocationGarduInduk;
 
 }

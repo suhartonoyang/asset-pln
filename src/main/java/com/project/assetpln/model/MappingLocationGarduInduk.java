@@ -52,7 +52,7 @@ public class MappingLocationGarduInduk implements Serializable {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "gardu_induk_id", nullable = false)
-	@JsonIgnoreProperties("mappingLocationGarduInduk")
+	@JsonIgnoreProperties({ "mappingLocationGarduInduk", "flooding" })
 	private GarduInduk garduInduk;
 
 }
