@@ -3,6 +3,7 @@
 package com.project.assetpln.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -84,6 +85,14 @@ public class Flooding implements Serializable {
 		default:
 			return "NO";
 		}
+	}
+	
+	@Transient
+	private String disasterDateSimplify;
+	
+	public String getDisasterDateSimplify() {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		return sdf.format(disasterDate);
 	}
 	
 }

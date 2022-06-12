@@ -3,6 +3,7 @@
 package com.project.assetpln.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -56,5 +58,13 @@ public class UploadHistory implements Serializable {
 	@JoinColumn(name = "location_id", nullable = false)
 	@JsonIgnoreProperties("uploadHistory")
 	private Location location;
+
+	@Transient
+	private String uploadDateSimplifly;
+
+	public String getUploadDateSimplify() {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		return sdf.format(uploadDate);
+	}
 
 }
