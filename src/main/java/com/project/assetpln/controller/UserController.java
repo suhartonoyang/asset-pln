@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "${rest.prefix}/users")
 @RestController
 @CrossOrigin
-@Api(description = "for user admin and teacher")
 public class UserController {
 
 	@Autowired

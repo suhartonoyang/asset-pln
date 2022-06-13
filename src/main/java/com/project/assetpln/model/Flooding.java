@@ -62,37 +62,43 @@ public class Flooding implements Serializable {
 	@JoinColumn(name = "location_id", nullable = false)
 	@JsonIgnoreProperties({ "flooding", "mappingLocationGarduInduk" })
 	private Location location;
-	
+
 	@Transient
 	private String isGarduSubmergedDescription;
-	
+
 	public String getIsGarduSubmergedDescription() {
 		switch (isGarduSubmerged) {
 		case 1:
-			return "YES";
+			return "YA";
 		default:
-			return "NO";
+			return "TIDAK";
 		}
 	}
-	
+
 	@Transient
 	private String isNeighbourhoodSubmergedDescription;
-	
+
 	public String getIsNeighbourhoodSubmergedDescription() {
 		switch (isNeighbourhoodSubmerged) {
 		case 1:
-			return "YES";
+			return "YA";
 		default:
-			return "NO";
+			return "TIDAK";
 		}
 	}
-	
+
 	@Transient
 	private String disasterDateSimplify;
-	
+
 	public String getDisasterDateSimplify() {
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
-		return sdf.format(disasterDate);
+		if (this.disasterDate != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+			return sdf.format(disasterDate);
+		}
+
+		return null;
 	}
-	
+
+	@Transient
+	private String garduIndukName;
 }

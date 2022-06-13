@@ -41,7 +41,7 @@ public class UploadHistory implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false, precision = 10)
-	private int id;
+	private Integer id;
 	@Column(name = "upload_date", nullable = false)
 	private Date uploadDate;
 	@Column(name = "created_by", nullable = false, length = 255)
@@ -56,13 +56,13 @@ public class UploadHistory implements Serializable {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "location_id", nullable = false)
-	@JsonIgnoreProperties("uploadHistory")
+	@JsonIgnoreProperties({ "uploadHistory", "mappingLocationGarduInduk" })
 	private Location location;
 
 	@Transient
 	private String uploadDateSimplifly;
 
-	public String getUploadDateSimplify() {
+	public String getUploadDateSimplifly() {
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
 		return sdf.format(uploadDate);
 	}

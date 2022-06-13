@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
@@ -49,7 +50,7 @@ public class GarduInduk implements Serializable {
 	private Date createdDate;
 
 	@OneToMany(mappedBy = "garduInduk")
-	@JsonIgnoreProperties("garduInduk")
+	@JsonIgnore
 	private List<Flooding> flooding;
 
 	@OneToMany(mappedBy = "garduInduk")

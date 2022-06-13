@@ -9,4 +9,5 @@ import com.project.assetpln.model.Location;
 @Repository
 public interface GarduIndukRepository extends JpaRepository<GarduInduk, Integer> {
 
+	public GarduInduk findByName(String name);
 }
