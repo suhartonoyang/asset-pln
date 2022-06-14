@@ -1,9 +1,11 @@
 package com.project.assetpln.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,11 @@ public class FloodingService {
 	private GarduIndukRepository garduIndukRepository;
 
 	public Flooding addOne(Flooding flooding) {
+		Date date = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+		System.out.println(date);
+		
+		flooding.setCreatedDate(date);
+		
 		GarduInduk garduInduk = new GarduInduk();
 		if (flooding.getGarduInduk() != null) {
 			garduInduk = garduIndukRepository.findById(flooding.getGarduInduk().getId()).orElse(null);

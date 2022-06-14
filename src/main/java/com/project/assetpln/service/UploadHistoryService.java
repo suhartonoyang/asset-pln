@@ -3,6 +3,7 @@ package com.project.assetpln.service;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -84,7 +86,7 @@ public class UploadHistoryService {
 			uploadHistory.setLocation(location);
 		}
 
-		Date now = new Date();
+		Date now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
 		uploadHistory.setCreatedBy(username);
 		uploadHistory.setCreatedDate(now);
 		uploadHistory.setUploadDate(now);
@@ -112,11 +114,11 @@ public class UploadHistoryService {
 		if (extractResult) {
 			fileHandlingService.saveMultipartFile("asset-pln", file);
 			String filename = StringUtils.cleanPath(file.getOriginalFilename());
-			
+
 			String encryptedPath = fileHandlingService.getPath("asset-pln", (filename + ".encrypted"));
 			java.io.File encryptedFile = new java.io.File(encryptedPath);
 			encryptorFile.encrypt(getFile(fileHandlingService.getPath("asset-pln", filename)), encryptedFile);
-			
+
 			String decryptedPath = fileHandlingService.getPath("asset-pln", filename.replace(".", "-decrypted."));
 			java.io.File decryptedFile = new java.io.File(decryptedPath);
 			encryptorFile.decrypt(encryptedFile, decryptedFile);
@@ -223,7 +225,7 @@ public class UploadHistoryService {
 
 		return true;
 	}
-	
+
 	private java.io.File getFile(String path) throws FileNotFoundException {
 		java.io.File file = ResourceUtils.getFile(path);
 		return file;

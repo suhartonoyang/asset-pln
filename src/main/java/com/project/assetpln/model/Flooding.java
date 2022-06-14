@@ -92,7 +92,7 @@ public class Flooding implements Serializable {
 
 	public String getDisasterDateSimplify() {
 		if (this.disasterDate != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			return sdf.format(disasterDate);
 		}
 

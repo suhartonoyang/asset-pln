@@ -39,11 +39,11 @@ public class UserService {
 		User newUser = new User();
 		User existingUser = getUserById(user.getId());
 		if (existingUser == null) {
-			newUser.setCreatedBy(user.getCreatedBy());
+			newUser.setCreatedBy(user.getCreatedBy().toUpperCase());
 			newUser.setCreatedDate(new Date());
 		} else {
 			newUser.setId(existingUser.getId());
-			newUser.setCreatedBy(existingUser.getCreatedBy());
+			newUser.setCreatedBy(existingUser.getCreatedBy().toUpperCase());
 			newUser.setCreatedDate(existingUser.getCreatedDate());
 		}
 

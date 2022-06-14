@@ -63,7 +63,7 @@ public class UploadHistory implements Serializable {
 	private String uploadDateSimplifly;
 
 	public String getUploadDateSimplifly() {
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(uploadDate);
 	}
 
