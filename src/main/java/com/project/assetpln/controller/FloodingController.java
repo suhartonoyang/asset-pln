@@ -44,6 +44,9 @@ public class FloodingController {
 		if (flooding == null) {
 			code = String.valueOf(HttpStatus.NOT_FOUND.value());
 			message = "No Data Found";
+			response.setCode(code);
+			response.setMessage(message);
+			return ResponseEntity.ok(response);
 		}
 
 		response.setCode(code);
@@ -55,9 +58,8 @@ public class FloodingController {
 
 	@GetMapping
 	public ResponseEntity<PaginationResponse> getFloodingsByCriteria(@RequestParam(required = false) Date disasterDate,
-			@RequestParam(required = false) Integer locationId,
-			@RequestParam Integer pageNumber) {
-		Page<Flooding> flooding = floodingService.getFloodingsByCriteria(locationId, disasterDate, pageNumber-1);
+			@RequestParam(required = false) Integer locationId, @RequestParam Integer pageNumber) {
+		Page<Flooding> flooding = floodingService.getFloodingsByCriteria(locationId, disasterDate, pageNumber - 1);
 		PaginationResponse response = new PaginationResponse();
 		String code = String.valueOf(HttpStatus.OK.value());
 		String message = HttpStatus.OK.name();
@@ -74,7 +76,6 @@ public class FloodingController {
 		response.setTotalAllData(flooding.getNumberOfElements());
 		response.setTotalPages(flooding.getTotalPages());
 		response.setData(flooding.getContent());
-
 
 		return ResponseEntity.ok(response);
 	}
@@ -101,7 +102,7 @@ public class FloodingController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(resp);
 	}
-	
+
 	private Pageable getPagination(Integer page, Integer pageSize) {
 		if (page == null || pageSize == null)
 			return null;

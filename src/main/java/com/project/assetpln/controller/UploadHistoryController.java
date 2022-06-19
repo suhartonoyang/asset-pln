@@ -38,6 +38,9 @@ public class UploadHistoryController {
 		if (uploadHistory == null) {
 			code = String.valueOf(HttpStatus.NOT_FOUND.value());
 			message = "No Data Found";
+			response.setCode(code);
+			response.setMessage(message);
+			return ResponseEntity.ok(response);
 		}
 
 		response.setCode(code);
@@ -51,12 +54,13 @@ public class UploadHistoryController {
 	public ResponseEntity<PaginationResponse> getUploadHistoriesByCriteria(@RequestParam(required = false) Integer id,
 			@RequestParam(required = false) Date uploadDate, @RequestParam(required = false) Integer locationId,
 			@RequestParam int pageNumber) {
-		Page<UploadHistory> uploadHistory = uploadHistoryService.getUploadHistoriesByCriteriaPaging(id, uploadDate, locationId, pageNumber-1);
+		Page<UploadHistory> uploadHistory = uploadHistoryService.getUploadHistoriesByCriteriaPaging(id, uploadDate, locationId,
+				pageNumber - 1);
 		PaginationResponse response = new PaginationResponse();
 		String code = String.valueOf(HttpStatus.OK.value());
 		String message = HttpStatus.OK.name();
 
-		if (uploadHistory.getContent()==null) {
+		if (uploadHistory.getContent() == null) {
 			code = String.valueOf(HttpStatus.NOT_FOUND.value());
 			message = "No Data Found";
 		}
