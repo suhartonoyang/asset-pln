@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3388
--- Waktu pembuatan: 14 Jun 2022 pada 08.28
+-- Waktu pembuatan: 19 Jun 2022 pada 19.40
 -- Versi server: 10.1.37-MariaDB
 -- Versi PHP: 7.0.33
 
@@ -170,7 +170,8 @@ INSERT INTO `flooding` (`id`, `location_id`, `gardu_induk_id`, `penyulang`, `gar
 (506, 1, 3, 'TAHAN', 'PM305P', '2021-02-20 00:00:00', 0, 1, 'ADMIN', '2022-06-13 09:56:04'),
 (507, 1, 3, 'ASAP', 'PM348', '2021-02-21 00:00:00', 0, 1, 'ADMIN', '2022-06-13 09:56:04'),
 (508, 5, 26, 'MASINIS', 'KB197', '2022-05-01 01:00:00', 1, 1, 'admin', '2022-06-14 06:07:24'),
-(509, 5, 26, 'INSTRUKTUR', 'BT259', '2022-01-01 00:00:00', 1, 1, 'admin', '2022-06-14 00:00:00');
+(509, 5, 26, 'INSTRUKTUR', 'BT259', '2022-01-01 00:00:00', 1, 1, 'admin', '2022-06-14 00:00:00'),
+(510, 5, 26, 'INSTRUKTUR', 'BT269', '2021-06-01 00:00:00', 1, 1, 'ADMIN', '2022-06-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -309,6 +310,20 @@ INSERT INTO `mapping_location_gardu_induk` (`id`, `location_id`, `gardu_induk_id
 -- --------------------------------------------------------
 
 --
+-- Stand-in struktur untuk tampilan `summary_flooding_v`
+-- (Lihat di bawah untuk tampilan aktual)
+--
+CREATE TABLE `summary_flooding_v` (
+`location_id` int(11)
+,`location_name` varchar(255)
+,`YEAR` int(4)
+,`total_gardu_submerged` decimal(32,0)
+,`total_neighbourhood_submerged` decimal(32,0)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `upload_history`
 --
 
@@ -336,9 +351,9 @@ INSERT INTO `upload_history` (`id`, `file_id`, `location_id`, `upload_date`, `cr
 (25, 25, 1, '2022-06-13 07:10:46', 'ADMIN', '2022-06-13 07:10:46'),
 (31, 31, 1, '2022-06-13 09:24:42', 'ADMIN', '2022-06-13 09:24:42'),
 (32, 32, 1, '2022-06-13 09:25:55', 'ADMIN', '2022-06-13 09:25:55'),
-(33, 33, 1, '2022-06-13 09:36:44', 'ADMIN', '2022-06-13 09:36:44'),
-(34, 34, 1, '2022-06-13 09:38:04', 'ADMIN', '2022-06-13 09:38:04'),
-(35, 35, 1, '2022-06-13 09:56:02', 'ADMIN', '2022-06-13 09:56:02');
+(33, 33, 5, '2022-06-13 09:36:44', 'ADMIN', '2022-06-13 09:36:44'),
+(34, 34, 5, '2022-06-13 09:38:04', 'ADMIN', '2022-06-13 09:38:04'),
+(35, 35, 5, '2022-06-13 09:56:02', 'ADMIN', '2022-06-13 09:56:02');
 
 -- --------------------------------------------------------
 
@@ -367,6 +382,15 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `handphone_number`, `email`, `role`, `aes_configuration_id`, `password_key`, `created_by`, `created_date`) VALUES
 (2, 'suhartonoyang', 'Z0t5LsxMwrNJ5PaZnJE0MYDBQX3WmlJa//q/VbpmnYeKW5plksQkVuJaeuQZfJS2pCvECmanpoy8', 'Suhartono', '081299008833', 'suhartonoyang9999@gmail.com', 'ADMIN', 1, 'A6F2E9B202EAD5AF3E3C2A048378D4E874110E102ED4A8343DC09824BAAE27D6', 'ADMIN', '2022-06-12 11:05:39'),
 (3, 'agushendra', 'Ytw8XVoFMtLNHujaDRcbCvQOMdde0v2Ep4D9ricYqIQehdK7jJqCTz1y2iZJv1wG79sax6g2', 'Agus Hendra', '081990998990', 'agushendra@gmail.com', 'USER', 1, 'A6F2E9B202EAD5AF3E3C2A048378D4E874110E102ED4A8343DC09824BAAE27D6', 'ADMIN', '2022-06-14 06:10:09');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur untuk view `summary_flooding_v`
+--
+DROP TABLE IF EXISTS `summary_flooding_v`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`` SQL SECURITY DEFINER VIEW `summary_flooding_v`  AS  select `b`.`location_id` AS `location_id`,`a`.`name` AS `location_name`,year(`b`.`disaster_date`) AS `YEAR`,sum(coalesce(`b`.`is_gardu_submerged`,0)) AS `total_gardu_submerged`,sum(coalesce(`b`.`is_neighbourhood_submerged`,0)) AS `total_neighbourhood_submerged` from (`location` `a` join `flooding` `b` on((`a`.`id` = `b`.`location_id`))) group by `b`.`location_id`,`a`.`name`,year(`b`.`disaster_date`) order by `a`.`name`,year(`b`.`disaster_date`) desc ;
 
 --
 -- Indexes for dumped tables
@@ -448,7 +472,7 @@ ALTER TABLE `file`
 -- AUTO_INCREMENT untuk tabel `flooding`
 --
 ALTER TABLE `flooding`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=510;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=511;
 
 --
 -- AUTO_INCREMENT untuk tabel `gardu_induk`
