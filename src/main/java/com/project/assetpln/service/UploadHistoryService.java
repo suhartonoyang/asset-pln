@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -19,12 +20,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.ImmutableMap;
+import com.project.assetpln.bean.PaginationResponse;
 import com.project.assetpln.model.File;
 import com.project.assetpln.model.Flooding;
 import com.project.assetpln.model.GarduInduk;
@@ -71,6 +77,19 @@ public class UploadHistoryService {
 
 	public List<UploadHistory> getUploadHistoriesByCriteria(Integer id, Date uploadDate, Integer locationId) {
 		return uploadHistoryRepository.findByCriteria(id, uploadDate, locationId);
+	}
+
+	public Page<UploadHistory> getUploadHistoriesByCriteriaPaging(Integer id, Date uploadDate, Integer locationId, Integer pageNumber) {
+		Pageable pagination = getPagination(pageNumber, 10);
+		Page<UploadHistory> result = uploadHistoryRepository.findByCriteriaPaging(id, uploadDate, locationId, pagination);
+		return result;
+	}
+
+	private Pageable getPagination(Integer page, Integer pageSize) {
+		if (page == null || pageSize == null)
+			return null;
+
+		return PageRequest.of(page, pageSize, Sort.by("id").ascending());
 	}
 
 	public UploadHistory getOneById(Integer id) {

@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.assetpln.bean.PaginationResponse;
 import com.project.assetpln.bean.Response;
-import com.project.assetpln.model.AesConfiguration;
 import com.project.assetpln.model.Flooding;
-import com.project.assetpln.model.Location;
-import com.project.assetpln.model.User;
-import com.project.assetpln.repository.FloodingRepository;
+import com.project.assetpln.model.UploadHistory;
 import com.project.assetpln.service.FloodingService;
-import com.project.assetpln.service.LocationService;
 
 @RestController
 @RequestMapping("${rest.prefix:}/floodings")
@@ -52,21 +54,27 @@ public class FloodingController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Response> getFloodingsByCriteria(@RequestParam(required = false) Date disasterDate,
-			@RequestParam(required = false) Integer locationId) {
-		List<Flooding> floodings = floodingService.getFloodingsByCriteria(disasterDate, locationId);
-		Response response = new Response();
+	public ResponseEntity<PaginationResponse> getFloodingsByCriteria(@RequestParam(required = false) Date disasterDate,
+			@RequestParam(required = false) Integer locationId,
+			@RequestParam Integer pageNumber) {
+		Page<Flooding> flooding = floodingService.getFloodingsByCriteria(locationId, disasterDate, pageNumber-1);
+		PaginationResponse response = new PaginationResponse();
 		String code = String.valueOf(HttpStatus.OK.value());
 		String message = HttpStatus.OK.name();
 
-		if (floodings.isEmpty()) {
+		if (!flooding.hasContent()) {
 			code = String.valueOf(HttpStatus.NOT_FOUND.value());
 			message = "No Data Found";
 		}
 
 		response.setCode(code);
 		response.setMessage(message);
-		response.setData(floodings);
+		response.setPage(flooding.getNumber() + 1);
+		response.setPageSize(flooding.getSize());
+		response.setTotalAllData(flooding.getNumberOfElements());
+		response.setTotalPages(flooding.getTotalPages());
+		response.setData(flooding.getContent());
+
 
 		return ResponseEntity.ok(response);
 	}
@@ -82,5 +90,22 @@ public class FloodingController {
 			resp.setData(Arrays.asList(newFlooding));
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Response> deleteAlumniById(@PathVariable Integer id) {
+		floodingService.deleteById(id);
+		Response resp = new Response();
+		resp.setCode(String.valueOf(HttpStatus.OK.value()));
+		resp.setMessage("Sucessfully Delete");
+
+		return ResponseEntity.status(HttpStatus.OK).body(resp);
+	}
+	
+	private Pageable getPagination(Integer page, Integer pageSize) {
+		if (page == null || pageSize == null)
+			return null;
+
+		return PageRequest.of(page, pageSize, null);
 	}
 }

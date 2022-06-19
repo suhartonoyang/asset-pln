@@ -7,11 +7,16 @@ import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.project.assetpln.model.Flooding;
 import com.project.assetpln.model.GarduInduk;
 import com.project.assetpln.model.Location;
+import com.project.assetpln.model.UploadHistory;
 import com.project.assetpln.repository.FloodingRepository;
 import com.project.assetpln.repository.GarduIndukRepository;
 import com.project.assetpln.repository.LocationRepository;
@@ -31,9 +36,9 @@ public class FloodingService {
 	public Flooding addOne(Flooding flooding) {
 		Date date = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
 		System.out.println(date);
-		
+
 		flooding.setCreatedDate(date);
-		
+
 		GarduInduk garduInduk = new GarduInduk();
 		if (flooding.getGarduInduk() != null) {
 			garduInduk = garduIndukRepository.findById(flooding.getGarduInduk().getId()).orElse(null);
@@ -50,30 +55,24 @@ public class FloodingService {
 		return floodingRepository.save(flooding);
 	}
 
-	public List<Flooding> getFloodingsByCriteria(Date disasterDate, Integer locationId) {
-		List<Flooding> floodings = new ArrayList<Flooding>();
+	public Page<Flooding> getFloodingsByCriteria(Integer locationId, Date disasterDate, Integer pageNumber) {
+		Pageable pagination = getPagination(pageNumber, 10);
+		Page<Flooding> result = floodingRepository.findByCriteriaPaging(locationId, disasterDate, pagination); 
+		return result;
+	}
 
-		if (locationId == null && disasterDate == null) {
-			floodings = floodingRepository.findAll();
-		}
+	private Pageable getPagination(Integer page, Integer pageSize) {
+		if (page == null || pageSize == null)
+			return null;
 
-		if (locationId != null && disasterDate == null) {
-			floodings = floodingRepository.findByLocation_Id(locationId);
-		}
-
-		if (locationId == null && disasterDate != null) {
-			floodings = floodingRepository.findByDisasterDate(disasterDate);
-		}
-
-		if (locationId != null && disasterDate != null) {
-			floodings = floodingRepository.findByLocation_IdAndDisasterDate(locationId, disasterDate);
-		}
-
-		return floodings;
-
+		return PageRequest.of(page, pageSize, Sort.by("id").ascending());
 	}
 
 	public Flooding getOneById(Integer id) {
 		return floodingRepository.findById(id).orElse(null);
+	}
+
+	public void deleteById(Integer id) {
+		floodingRepository.deleteById(id);
 	}
 }
